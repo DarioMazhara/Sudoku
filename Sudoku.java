@@ -3,10 +3,13 @@ import java.util.Scanner;
 
 public class Sudoku {
 	
-	static int[][] board = {{5,3,0,0,7,0,0,0,0}, {6,0,0,1,9,5,0,0,0}, {0,9,8,0,0,0,0,6,0}, {8,0,0,0,6,0,0,0,3}, {4,0,0,8,0,3,0,0,1}, {7,0,0,0,2,0,0,0,6},
-							{0,6,0,0,0,0,2,8,0}, {0,0,0,4,1,9,0,0,5}, {0,0,0,0,8,0,0,7,9}};
-//	static int[][] board = new int[9][9];
+	//static int[][] board = {{5,3,0,0,7,0,0,0,0}, {6,0,0,1,9,5,0,0,0}, {0,9,8,0,0,0,0,6,0}, {8,0,0,0,6,0,0,0,3}, {4,0,0,8,0,3,0,0,1}, {7,0,0,0,2,0,0,0,6},
+		//					{0,6,0,0,0,0,2,8,0}, {0,0,0,4,1,9,0,0,5}, {0,0,0,0,8,0,0,7,9}};
+	static int[][] board = new int[9][9];
+	
+	//Allows user to input numbers
 	public static void enterBoard() {
+		
 		Scanner input = new Scanner(System.in);
 		
 		//Board entry
@@ -19,6 +22,7 @@ public class Sudoku {
 		}
 	}
 	
+	//Prints the board
 	public static void printBoard() {
 		for (int row = 0; row <= 8; row++) {
 			for (int col = 0; col <= 8; col++) {
@@ -33,6 +37,7 @@ public class Sudoku {
 		}
 	}
 	
+	//Checks if the given parameter 'num' is repeated anywhere in that row
 	public static boolean repeatedInRow(int row, int num) {
 		for (int i = 0; i < 9; i++) {
 			if (board[row][i] == num) {
@@ -42,6 +47,7 @@ public class Sudoku {
 		return false;
 	}
 	
+	//Checks if the given parameter 'num' is repeated anywhere in that column
 	public static boolean repeatedInCol(int col, int num) {
 		for (int i = 0; i < 9; i++) {
 			if (board[i][col] == num) {
@@ -50,8 +56,9 @@ public class Sudoku {
 		}
 		return false;
 	}
-	
+	//Checks if the given parameter 'num' is repeated anywhere in a 3x3 box
 	public static boolean repeatedInBox(int row, int col, int num) {
+		//rowStart and colStart find the difference between the row or column number and the modulus of 3 to determine which 3x3 box to focus on
 		int rowStart = row - row%3;
 		int colStart = col - col%3;
 		for (int r = rowStart; r < rowStart + 3; r++) {
@@ -62,21 +69,29 @@ public class Sudoku {
 		}
 		return false;
 	}
+	//Checks if 'num' is allowed in a certain cell 
 	public static boolean numAllowed(int row, int col, int num) {
 		return !(repeatedInRow(row, num) || repeatedInCol(col, num) || repeatedInBox(row, col, num));
 		
 	}
 	
+	//Solves the  board
 	public static boolean fillBoard() {
+		//Iterates through the board
 		for (int row = 0; row <= 8; row++) {
 			for (int col = 0; col <= 8; col++) {
-				if (board[row][col] == 0) {																																										
+				//Checks if there is an empty cell
+				if (board[row][col] == 0) {
+					//Tries numbers 1-9 on the empty cell
 					for (int i = 1; i < 10; i++) {
+						//Check if the number is allowed, if it is set it in the cell
 						if (numAllowed(row, col, i)) {
 							board[row][col] = i;
+							//Runs fillboard again
 							if (fillBoard()) {
 								return true;
 							}
+							//If fillboard() doesn't go through the no more numbers are available to be set and it returns false
 							else {
 								board[row][col] = 0;
 							}
@@ -92,7 +107,7 @@ public class Sudoku {
 	
 	public static void main(String[] args) {
 		Sudoku sudoku = new Sudoku();
-	//	sudoku.enterBoard();
+		sudoku.enterBoard();
 		sudoku.printBoard();
 		sudoku.fillBoard();
 		System.out.println("_____________________");
