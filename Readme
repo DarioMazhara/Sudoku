@@ -1,5 +1,7 @@
 Contributors: Dario Mazhara
 
 Runtime: O(n^m)
+n = size of the board (81)
+m = 1-9
 
 Space complexity: O(n)
